@@ -5,18 +5,11 @@
 const int MAX_SIZE = 10;
 
 // Function to read matrix data from file
-void readMatrix(int matrix[MAX_SIZE][MAX_SIZE], int& size, const std::string& filename) {
-    std::ifstream file(filename);
-    if (file.is_open()) {
-        file >> size;
-        for (int i = 0; i < size; ++i) {
-            for (int j = 0; j < size; ++j) {
-                file >> matrix[i][j];
-            }
+void readMatrix(int matrix[MAX_SIZE][MAX_SIZE], int size, std::ifstream& file) {
+    for (int i = 0; i < size; ++i) {
+        for (int j = 0; j < size; ++j) {
+            file >> matrix[i][j];
         }
-        file.close();
-    } else {
-        std::cerr << "Error: Unable to open file." << std::endl;
     }
 }
 
@@ -97,8 +90,13 @@ int main() {
     int matrix2[MAX_SIZE][MAX_SIZE];
     int result[MAX_SIZE][MAX_SIZE];
 
-    readMatrix(matrix1, size, "matrix_input.txt");
-    readMatrix(matrix2, size, "matrix_input.txt");
+
+    std::ifstream file("matrix_input.txt");
+    if (file.is_open()) {
+        file >> size; // Read the size of the matrices
+        readMatrix(matrix1, size, file); // Read the first matrix
+        readMatrix(matrix2, size, file); // Read the second matrix
+        file.close();
 
     std::cout << "Matrix 1:" << std::endl;
     printMatrix(matrix1, size);
@@ -129,4 +127,5 @@ int main() {
     printMatrix(result, size);
 
     return 0;
+}
 }
